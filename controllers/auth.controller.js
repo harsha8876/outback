@@ -23,7 +23,8 @@ export const register= async (req,res,next) =>
          const { password, ...info } = newUser._doc;
    
          // Set the token in a cookie
-         res.cookie("accessToken", token, { httpOnly: true });
+        res.cookie("accessToken", token, { secure: true });
+
    
          // Send response with user info and token
          res.status(201).send({ message: "User has been successfully created", user: info, token });
@@ -49,7 +50,7 @@ export const login= async (req,res,next) =>
       }, process.env.JWT_KEY);
 
       const { password, ...info } = user._doc;
-    res.cookie("accessToken", token, {httpOnly: true,}).status(200).send(info);
+    res.cookie("accessToken", token, { secure: true }).status(200).send(info);
    }
    catch(err){
       next(err);
@@ -131,8 +132,7 @@ export const resetpassword = async (req, res, next) => {
       }, process.env.JWT_KEY);
 
       // Set the new token in a cookie
-      res.cookie("accessToken", newToken, { httpOnly: true });
-
+      res.cookie("accessToken", newToken, { secure: true });
 
       res.status(200).send({ message: "Password reset successful", token: newToken });
    } catch (error) {
