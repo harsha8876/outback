@@ -27,7 +27,7 @@ try {
  }
 };
 
-app.use(cors({ origin: "http://outfsource.onrender.com/", credentials: true }));
+app.use(cors({ origin: "http://outfsource.onrender.com", credentials: true }));
 app.use(express.json());
 app.use(cookieParser());
 
