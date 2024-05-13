@@ -12,23 +12,27 @@ import wishlistRoute from './routes/review.route.js'
 import cookieParser from "cookie-parser";
 import cors from "cors"
 
-
-const app=express();
+const app = express();
 dotenv.config();
 
-mongoose.set('strictQuery', true)
-const connect= async () => {
+mongoose.set('strictQuery', true);
 
-try {
-   await mongoose.connect(process.env.MONGO);
-   console.log("Connected to MongoDB!")
- } catch (error) {
-   console.log(error);
- }
+const connect = async () => {
+  try {
+    await mongoose.connect(process.env.MONGO);
+    console.log("Connected to MongoDB!")
+  } catch (error) {
+    console.log(error);
+  }
 };
 
+// Allow only specific origin and credentials
+const corsOptions = {
+  origin: 'https://outfsource.onrender.com',
+  credentials: true,
+};
 
-app.use(cors());
+app.use(cors(corsOptions));
 
 app.use(express.json());
 app.use(cookieParser());
@@ -41,14 +45,14 @@ app.use("/api/orders", orderRoute);
 app.use("/api/reviews", reviewRoute);
 app.use("/api/conversations", conversationRoute);
 
-
-app.use((err,req,res,next)=>{
-  const errorStatus = err.status || 500
+app.use((err, req, res, next) => {
+  const errorStatus = err.status || 500;
   const errorMessage = err.message || "Something went wrong!";
-
   return res.status(errorStatus).send(errorMessage);
-})
-const PORT = process.env.PORT || 8800
-app.listen(PORT, ()=>{
-   connect()
-   console.log("Backend server is running")});
+});
+
+const PORT = process.env.PORT || 8800;
+app.listen(PORT, () => {
+  connect();
+  console.log("Backend server is running");
+});
